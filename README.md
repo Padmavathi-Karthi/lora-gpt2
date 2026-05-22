@@ -1,4 +1,3 @@
-# lora-gpt2
 # LoRA from Scratch on GPT-2 
 
 This project implements **Low-Rank Adaptation (LoRA)** from scratch using PyTorch and applies it to a frozen GPT-2 (124M) model. The entire workflow is implemented in a **Jupyter Notebook (`Padma_lora.ipynb`)**, focusing on understanding and demonstrating parameter-efficient fine-tuning (PEFT).
