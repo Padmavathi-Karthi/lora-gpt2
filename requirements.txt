@@ -1,7 +1,7 @@
 torch
 transformers
+numpy
 datasets
 accelerate
 peft
 tqdm
-numpy
