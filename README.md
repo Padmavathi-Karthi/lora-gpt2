@@ -1,72 +1,80 @@
 # LoRA from Scratch on GPT-2 
 
-This project implements **Low-Rank Adaptation (LoRA)** from scratch using PyTorch and applies it to a frozen GPT-2 (124M) model. The entire workflow is implemented in a **Jupyter Notebook (`Padma_lora.ipynb`)**, focusing on understanding and demonstrating parameter-efficient fine-tuning (PEFT).
+This project implements Low-Rank Adaptation (LoRA) from scratch using PyTorch and applies it to a frozen GPT-2 (124M) model for parameter-efficient fine-tuning (PEFT) experiments.
+
+The implementation focuses on understanding and reproducing the core mechanics of LoRA, including low-rank adapter injection, frozen base-model training, and lightweight fine-tuning for transformer architectures.
 
 ---
 
 ## 🚀 Project Highlights
 
-- Implemented **LoRA (Low-Rank Adaptation)** from scratch using PyTorch
-- Injected LoRA layers into a frozen **GPT-2 small (124M)** model
-- Full training pipeline implemented in **Jupyter Notebook**
-- Fine-tuned on **TinyShakespeare dataset**
-- Verified only LoRA parameters are trainable
-- Generated Shakespeare-style text
-- Compared conceptually with Hugging Face **PEFT library**
-- Saved lightweight adapter weights instead of full model
+- Implemented LoRA layers manually using PyTorch
+- Injected trainable low-rank adapters into a frozen GPT-2 model
+- Fine-tuned GPT-2 on the TinyShakespeare dataset
+- Verified that only LoRA adapter parameters were updated during training
+- Generated Shakespeare-style text after fine-tuning
+- Compared the custom implementation conceptually with Hugging Face PEFT
 
 ---
 
-## 🧠 Notebook
+## 🔁 Architecture Overview
 
-All experiments and training are done inside:
-Padma_lora.ipynb
+The workflow follows a parameter-efficient fine-tuning pipeline:
 
-This notebook includes:
-- Model loading (GPT-2)
-- LoRA layer implementation
-- Dataset preprocessing (TinyShakespeare)
-- Training loop
-- Text generation
-- Evaluation experiments
+1. Load pretrained GPT-2 (124M)
+2. Freeze base transformer weights
+3. Inject low-rank LoRA adapters
+4. Train only adapter parameters
+5. Perform inference using adapted model
+
+This reduces the number of trainable parameters while preserving the pretrained model weights.
 
 ---
+## 🧰 Tech Stack
 
+- Python
+- PyTorch
+- Hugging Face Transformers
+- Hugging Face Datasets
+- Jupyter Notebook
+
+---
 ## 📊 Dataset
 
-- **TinyShakespeare**
-- Character-level dataset
-- Used for learning Shakespeare-style language modeling
-
----
+The project uses the TinyShakespeare dataset for lightweight language-model fine-tuning and text generation experiments.
 
 ## 🏗️ Project Structure
 
 ```text
-Projects/
+
+lora-gpt2/
 │
-├── Padma_lora.ipynb    # Main implementation notebook
+├── Padma_lora.ipynb           # Main implementation notebook
 │
 ├── README.md                  # Project documentation
 │
-└── fix_notebook.py     # Utility to fix GitHub rendering issues
+└── fix_notebook.py            # Utility to fix GitHub rendering issues
 │
-└──Requirements.txt
+└── requirements.txt
 
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup
 
-```bash id="setup1"
-git clone https://github.com/your-username/lora-gpt2.git
+```bash 
+git clone <repository-url>
 cd lora-gpt2
+
 python -m venv .venv
-source .venv/Scripts/activate   # Windows Git Bash
+source .venv/Scripts/activate       # Windows Git Bash
+
 pip install -r requirements.txt
 
 ```
+---
+
 ## 🚀 How to Run
 
 1. Launch Jupyter Notebook:
@@ -81,66 +89,38 @@ jupyter notebook
 Padma_lora.ipynb
 ```
 
-3. Run all cells sequentially to execute:
-- LoRA implementation
-- GPT-2 fine-tuning
-- Training loop
-- Text generation
+3. Run the notebook sequentially to:
+
+- initialize GPT-2
+- inject LoRA adapters
+- fine-tune the model
+- generate text samples
 
 ---
 
-## 💾 Output
+## 📈 Results
 
-After fine-tuning, the model generates pseudo-Shakespearean text in the style of TinyShakespeare.
-
-### Example Output
-
-```text
-ROMEO:
-O gentle night, thou art more fair than dawn...
-
-HAMLET:
-To be, or not to be, that is the question...
-```
+- Successfully fine-tuned GPT-2 using LoRA adapters only
+- Reduced trainable parameters compared to full fine-tuning
+- Generated coherent Shakespeare-style text samples after training
 
 ---
 
-## 🔁 PEFT Comparison
+## 🧪 Key Concepts Demonstrated
 
-The notebook also includes a conceptual comparison between the custom LoRA implementation and the Hugging Face `peft` library implementation.
-
-This helps validate the correctness of the custom LoRA approach and demonstrates understanding of parameter-efficient fine-tuning techniques.
-
----
-
-## 🧪 Key Learnings
-
-- Understanding LoRA and low-rank matrix decomposition
-- Fine-tuning transformer models efficiently
-- Freezing base model weights while training adapters
-- Internal architecture of GPT-2
-- Parameter-efficient fine-tuning (PEFT)
-- Practical experience with LLM adaptation workflows
-
----
-
-## 🧰 Tech Stack
-
-- PyTorch
-- Hugging Face Transformers
-- Hugging Face Datasets
-- Jupyter Notebook
-- PEFT
+- Parameter-Efficient Fine-Tuning (PEFT)
+- Low-rank matrix decomposition
+- Transformer adaptation
+- Frozen-weight fine-tuning
+- GPT-2 architecture understanding
+- Efficient LLM training workflows
 
 ---
 
 ## 📌 Future Improvements
 
-- Convert notebook workflow into a production-ready `train.py`
-- Add evaluation metrics such as perplexity and loss curves
-- Experiment with different style-transfer datasets
-  - Yoda quotes
-  - Dialogue datasets
-  - Character-specific text corpora
-- Deploy inference API for text generation
-- Add attention-only LoRA injection
+- Move notebook logic into modular Python training scripts
+- Add evaluation metrics such as perplexity and validation loss
+- Support configurable LoRA injection targets
+- Add experiment tracking and checkpointing
+
