@@ -54,20 +54,6 @@ Where:
 Only A and B are trained, while W₀ remains frozen.
 
 ---
-
-## 🔁 Architecture Overview
-
-The workflow follows a parameter-efficient fine-tuning pipeline:
-
-1. Load pretrained GPT-2 (124M)
-2. Freeze base transformer weights
-3. Inject low-rank LoRA adapters
-4. Train only adapter parameters
-5. Perform inference using adapted model
-
-This reduces the number of trainable parameters while preserving the pretrained model weights.
-
----
 ## 🧰 Tech Stack
 
 - Python
@@ -80,8 +66,7 @@ This reduces the number of trainable parameters while preserving the pretrained 
 ## 📊 Dataset
 
 ### Primary Dataset
-- TinyShakespeare
-- Character-level dataset for language modeling
+- TinyShakespeare (Character-level language modeling dataset)
 - Used for learning structured Shakespeare-style generation
   
 ### Control Dataset
@@ -162,13 +147,16 @@ LoRA significantly improves domain-specific performance while only slightly affe
 
 ## 🔁 PEFT Comparison
 
-A key part of this project is verifying that the manual LoRA implementation matches Hugging Face PEFT.
+A key validation step is comparing the manual LoRA implementation with Hugging Face PEFT.
 
 Results:
 
-- Trainable parameters: identical (~811K)
-- Performance: nearly identical perplexity curves
-- Output quality: similar Shakespeare-style generation
+- Identical trainable parameter count (~811K)
+- Similar perplexity trends during training
+- Comparable generation quality
+- Same target module behavior (c_attn, c_proj)
+
+---
 
 ## 🧪 Key Learnings
 
