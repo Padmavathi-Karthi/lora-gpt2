@@ -35,8 +35,8 @@ The implementation is fully built in a Jupyter Notebook (Padma_lora.ipynb).
 
 ---
 
-## LoRA Formulation (Core Idea)
-```text
+## 🧠 LoRA Formulation (Core Idea)
+
 For a frozen linear layer:
 
 W₀x + ΔWx
@@ -52,7 +52,6 @@ Where:
 - r ≪ hidden size (low-rank constraint)
 
 Only A and B are trained, while W₀ remains frozen.
-```
 
 ---
 
@@ -80,12 +79,12 @@ This reduces the number of trainable parameters while preserving the pretrained 
 ---
 ## 📊 Dataset
 
-# Primary Dataset
+### Primary Dataset
 - TinyShakespeare
 - Character-level dataset for language modeling
 - Used for learning structured Shakespeare-style generation
   
-# Control Dataset
+### Control Dataset
 - Excerpt from Pride & Prejudice
 - Used to measure catastrophic forgetting
 ---
@@ -148,11 +147,11 @@ Padma_lora.ipynb
 
 ## 📈 Results
 
-# Perplexity (Shakespeare)
+### Perplexity (Shakespeare)
   - Before LoRA: ~93
   - After LoRA: ~41
     
-# Control Corpus (Pride & Prejudice)
+### Control Corpus (Pride & Prejudice)
   - Before: ~16.9
   - After: ~18.5
     
@@ -161,7 +160,7 @@ LoRA significantly improves domain-specific performance while only slightly affe
 
 ---
 
-🔁 PEFT Comparison
+## 🔁 PEFT Comparison
 
 A key part of this project is verifying that the manual LoRA implementation matches Hugging Face PEFT.
 
