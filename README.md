@@ -21,11 +21,11 @@ The implementation focuses on understanding and reproducing the core mechanics o
 
 The workflow follows a parameter-efficient fine-tuning pipeline:
 
-1. Load pretrained GPT-2 small (124M)
-2. Freeze original transformer weights
-3. Inject trainable low-rank LoRA matrices
+1. Load pretrained GPT-2 (124M)
+2. Freeze base transformer weights
+3. Inject low-rank LoRA adapters
 4. Train only adapter parameters
-5. Generate text using the adapted model
+5. Perform inference using adapted model
 
 This reduces the number of trainable parameters while preserving the pretrained model weights.
 
