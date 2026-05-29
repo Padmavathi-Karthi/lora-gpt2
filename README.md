@@ -1,19 +1,58 @@
-# LoRA from Scratch on GPT-2 
+# LoRA from Scratch on GPT-2 (PEFT Implementation)
 
 This project implements Low-Rank Adaptation (LoRA) from scratch using PyTorch and applies it to a frozen GPT-2 (124M) model for parameter-efficient fine-tuning (PEFT) experiments.
 
-The implementation focuses on understanding and reproducing the core mechanics of LoRA, including low-rank adapter injection, frozen base-model training, and lightweight fine-tuning for transformer architectures.
+The goal of this project is not only to fine-tune a language model, but to reproduce and deeply understand LoRA mechanics, including:
+
+- low-rank decomposition of weight updates
+- freezing pretrained transformer weights
+- injecting trainable adapters into attention and MLP layers
+- evaluating trade-offs using perplexity and style transfer
+
+The implementation is fully built in a Jupyter Notebook (Padma_lora.ipynb).
 
 ---
 
-## 🚀 Project Highlights
+## 🚀 Key Contributions
 
-- Implemented LoRA layers manually using PyTorch
-- Injected trainable low-rank adapters into a frozen GPT-2 model
-- Fine-tuned GPT-2 on the TinyShakespeare dataset
-- Verified that only LoRA adapter parameters were updated during training
-- Generated Shakespeare-style text after fine-tuning
-- Compared the custom implementation conceptually with Hugging Face PEFT
+- Implemented LoRA from scratch in PyTorch
+- Converted GPT-2 Conv1D layers to standard Linear layers for clean LoRA injection
+- Injected LoRA into:
+     - attention projection (c_attn)
+     - attention output projection (attn.c_proj)
+     - MLP projection (mlp.c_proj)
+- Verified only LoRA parameters are trainable (~0.65% of model)
+- Matched results with Hugging Face PEFT implementation
+- Built full training loop with:
+     - cosine learning rate schedule
+     - gradient clipping
+     - validation evaluation
+- Evaluated using:
+     - Shakespeare perplexity
+     - control corpus perplexity (Pride & Prejudice)
+- Performed style transfer experiments (Shakespeare / Yoda / dialogue datasets)
+- Saved and loaded lightweight LoRA adapters (~3 MB)
+
+---
+
+## LoRA Formulation (Core Idea)
+```text
+For a frozen linear layer:
+
+W₀x + ΔWx
+
+LoRA models the update as:
+
+ΔW = (B × A) × scaling
+
+Where:
+
+- A ∈ ℝ^(r × in_features)
+- B ∈ ℝ^(out_features × r)
+- r ≪ hidden size (low-rank constraint)
+
+Only A and B are trained, while W₀ remains frozen.
+```
 
 ---
 
@@ -41,7 +80,15 @@ This reduces the number of trainable parameters while preserving the pretrained 
 ---
 ## 📊 Dataset
 
-The project uses the TinyShakespeare dataset for lightweight language-model fine-tuning and text generation experiments.
+# Primary Dataset
+- TinyShakespeare
+- Character-level dataset for language modeling
+- Used for learning structured Shakespeare-style generation
+  
+# Control Dataset
+- Excerpt from Pride & Prejudice
+- Used to measure catastrophic forgetting
+---
 
 ## 🏗️ Project Structure
 
@@ -89,38 +136,67 @@ jupyter notebook
 Padma_lora.ipynb
 ```
 
-3. Run the notebook sequentially to:
+3. Run all cells sequentially:
 
-- initialize GPT-2
-- inject LoRA adapters
-- fine-tune the model
-- generate text samples
+- Load GPT-2
+- Inject LoRA adapters
+- Train on dataset
+- Evaluate perplexity
+- Generate text samples
 
 ---
 
 ## 📈 Results
 
-- Successfully fine-tuned GPT-2 using LoRA adapters only
-- Reduced trainable parameters compared to full fine-tuning
-- Generated coherent Shakespeare-style text samples after training
+# Perplexity (Shakespeare)
+  - Before LoRA: ~93
+  - After LoRA: ~41
+    
+# Control Corpus (Pride & Prejudice)
+  - Before: ~16.9
+  - After: ~18.5
+    
+Key Observation
+LoRA significantly improves domain-specific performance while only slightly affecting general language modeling ability.
 
 ---
 
-## 🧪 Key Concepts Demonstrated
+🔁 PEFT Comparison
 
-- Parameter-Efficient Fine-Tuning (PEFT)
-- Low-rank matrix decomposition
-- Transformer adaptation
-- Frozen-weight fine-tuning
-- GPT-2 architecture understanding
-- Efficient LLM training workflows
+A key part of this project is verifying that the manual LoRA implementation matches Hugging Face PEFT.
+
+Results:
+
+- Trainable parameters: identical (~811K)
+- Performance: nearly identical perplexity curves
+- Output quality: similar Shakespeare-style generation
+
+## 🧪 Key Learnings
+
+- Low-rank matrix factorization in deep learning
+- Transformer architecture internals (GPT-2)
+- Efficient fine-tuning vs full fine-tuning
+- Trade-off between specialization and generalization
+- Practical implementation of PEFT systems
+- Adapter-based model design
+
+---
+
+## 💾 Adapter System
+
+The project supports lightweight saving/loading:
+
+- Only LoRA parameters are stored (~3 MB)
+- Base GPT-2 remains unchanged
+- Adapters can be reloaded into fresh models
 
 ---
 
 ## 📌 Future Improvements
 
-- Move notebook logic into modular Python training scripts
-- Add evaluation metrics such as perplexity and validation loss
-- Support configurable LoRA injection targets
-- Add experiment tracking and checkpointing
+- Modular training script (train.py)
+- Support multiple target modules dynamically
+- Add experiment tracking (W&B / MLflow)
+- Extend to larger models (GPT-Neo / LLaMA-style blocks)
+- Add attention-only vs full-layer LoRA comparisons
 
